@@ -1,7 +1,5 @@
 (ns revolut-csv-parser.core
-  (:gen-class))
+  (:require [revolut-csv-parser.parser :as parser]))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+(defn -main []
+  (println (parser/csv->maps (slurp "revolut.csv"))))
