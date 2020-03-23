@@ -1,5 +1,6 @@
 (ns revolut-csv-parser.parser
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.edn :as edn]))
 
 (def ^:private column-keys [:date
                             :description
@@ -13,18 +14,18 @@
 
 (def ^:private conversions {:date identity
                             :description identity
-                            :paid-out identity
-                            :paid-in identity
-                            :exchange-out identity
-                            :exchange-in identity
-                            :balance identity
+                            :paid-out edn/read-string
+                            :paid-in edn/read-string
+                            :exchange-out edn/read-string
+                            :exchange-in edn/read-string
+                            :balance edn/read-string
                             :category identity
                             :notes identity})
 
 (defn- parse
   "Convert a CSV into rows of columns"
   [string]
-  (map #(str/split % #";")
+  (map (fn [x] (map str/trim (str/split x #";")))
        (str/split string #"\n")))
 
 (defn- normalize
